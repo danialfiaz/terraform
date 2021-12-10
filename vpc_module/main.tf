@@ -10,11 +10,11 @@ resource "aws_vpc" "main" {
 
 resource "aws_subnet" "public" {
   vpc_id            = aws_vpc.main.id
-  count             = length(var.public)
-  cidr_block        = element(var.public, count.index)
-  availability_zone = element(var.availability_zone, count.index+1)
+  count             = "${length(var.public)}"
+  cidr_block        = "${element(var.public, count.index)}"
+  availability_zone = "${element(var.availability_zone, count.index+1)}"
   tags = {
-    Name = "subnet_public-${count.index}"
+    Name = "subnet_public-${count.index+1}"
   }
 }
 
@@ -55,8 +55,8 @@ resource "aws_route_table" "public_route" {
 
 
 resource "aws_route_table_association" "association" {
-  count          = length(var.public)
-  subnet_id      = element(aws_subnet.public.*.id, count.index)
+  count          = "${length(var.public)}"
+  subnet_id      = "${element(aws_subnet.public.*.id, count.index)}"
   route_table_id = aws_route_table.public_route.id
 }
 
@@ -92,7 +92,7 @@ resource "aws_route_table" "private_route" {
 
 
 resource "aws_route_table_association" "pri_association" {
-  count          = length(var.private)
-  subnet_id      = element(aws_subnet.private.*.id, count.index)
+  count          = "${length(var.private)}"
+  subnet_id      = "${element(aws_subnet.private.*.id, count.index)}"
   route_table_id = aws_route_table.private_route.id
 }
