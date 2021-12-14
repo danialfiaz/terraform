@@ -10,7 +10,7 @@ resource "aws_db_instance" "mysql" {
   password               = var.password
   db_subnet_group_name   = aws_db_subnet_group.subnet_group.name
   vpc_security_group_ids = [aws_security_group.mysql_sg.id]
-  parameter_group_name   = "default.mysql5.7"
+  parameter_group_name   = var.parameter_group_name
   skip_final_snapshot    = true
   tags = {
     "Name" = "RDS_instance"
@@ -37,7 +37,8 @@ resource "aws_security_group" "mysql_sg" {
     from_port        = 3306
     to_port          = 3306
     protocol         = "tcp"
-    #cidr_blocks      = [aws_vpc.main.cidr_block]
+    security_groups  = [var.wordpress_sg]
+    #cidr_blocks     = [aws_vpc.main.cidr_block]
   }
 
   egress {

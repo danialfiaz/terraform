@@ -1,6 +1,7 @@
 resource "aws_vpc" "main" {
   cidr_block       = var.cidr_vpc_block
   instance_tenancy = "default"
+  enable_dns_hostnames = true
   tags = {
     Name = "ASSIGN_VPC"
   }
@@ -13,6 +14,8 @@ resource "aws_subnet" "public" {
   count             = "${length(var.public)}"
   cidr_block        = "${element(var.public, count.index)}"
   availability_zone = "${element(var.availability_zone, count.index+1)}"
+
+  map_public_ip_on_launch = true
   tags = {
     Name = "subnet_public-${count.index+1}"
   }
@@ -21,9 +24,9 @@ resource "aws_subnet" "public" {
 
 resource "aws_subnet" "private" {
   vpc_id            = aws_vpc.main.id
-  count             = "${length(var.private)}"
-  cidr_block        = "${element(var.private, count.index)}"
-  availability_zone = "${element(var.availability_zone, count.index)}"
+  count             = length(var.private)
+  cidr_block        = element(var.private, count.index)
+  availability_zone = element(var.availability_zone, count.index)
   tags = {
     Name = "subnet_private-${count.index+1}"
   }
@@ -55,8 +58,8 @@ resource "aws_route_table" "public_route" {
 
 
 resource "aws_route_table_association" "association" {
-  count          = "${length(var.public)}"
-  subnet_id      = "${element(aws_subnet.public.*.id, count.index)}"
+  count          = length(var.public)
+  subnet_id      = element(aws_subnet.public.*.id, count.index)
   route_table_id = aws_route_table.public_route.id
 }
 

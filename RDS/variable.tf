@@ -52,3 +52,12 @@ variable "public" {
 variable "vpc_id" {
 
 }
+
+variable "parameter_group_name" {
+    
+}
+
+
+variable "wordpress_sg" {
+   
+}
