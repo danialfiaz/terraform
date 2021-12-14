@@ -12,7 +12,8 @@ resource "aws_instance" "wordpress" {
   ami             = var.ami
   instance_type   = var.instance_type
   key_name        = var.key_name
-  subnet_id       = var.subnet_id
+  count = 1
+  subnet_id       = "${element(var.subnet_id, count.index)}"
   security_groups = [aws_security_group.wordpress_sg.id]
   user_data       = "${data.template_file.mytemp.rendered}"
   associate_public_ip_address = true

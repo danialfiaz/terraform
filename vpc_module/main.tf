@@ -71,7 +71,7 @@ resource "aws_eip" "nat_gw" {
 resource "aws_nat_gateway" "priv_ngw" {
   allocation_id = aws_eip.nat_gw.id
   subnet_id     = aws_subnet.public[0].id
-  depends_on    = [aws_internet_gateway.public_igw]
+  depends_on    = [aws_eip.nat_gw]
   tags = {
     Name = "private_ngw"
   }

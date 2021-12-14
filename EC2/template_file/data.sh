@@ -9,7 +9,7 @@ cd wordpress
 cp wp-config-sample.php wp-config.php
 define('DB_SERVER', '${rds_endpoint}');
 define('DB_USERNAME', '${username_wp}');
-define('DB_PASSWORD', '${password_wp}');
+define('DB_PASSWORD', '${password_wp;}');
 define('DB_DATABASE', '${name_wp}');
 sudo amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2
 cd /home/ec2-user
