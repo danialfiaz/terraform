@@ -1,5 +1,5 @@
-data "template_file" "mytemp" {
-  template = "${file("${path.module}/template_file/data.sh")}"
+data "template_file" "init" {
+  template = "${file("${path.module}/template_file/init.sh")}"
   vars = {
     rds_endpoint = "${var.rds_endpoint}"
     name_wp         = "${var.name_wp}"
@@ -15,7 +15,7 @@ resource "aws_instance" "wordpress" {
   count = 1
   subnet_id       = "${element(var.subnet_id, count.index)}"
   security_groups = [aws_security_group.wordpress_sg.id]
-  user_data       = "${data.template_file.mytemp.rendered}"
+  user_data       = "${data.template_file.init.rendered}"
   associate_public_ip_address = true
 
   root_block_device {
