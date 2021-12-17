@@ -18,6 +18,8 @@ resource "aws_instance" "wordpress" {
   user_data       = "${data.template_file.init.rendered}"
   associate_public_ip_address = true
 
+  iam_instance_profile = "S3_Role"
+
   root_block_device {
     volume_size = 8
     volume_type = "gp2"
@@ -37,6 +39,14 @@ resource "aws_security_group" "wordpress_sg" {
     description     = "incoming traffic for ec2"
     from_port       = 80
     to_port         = 80
+    protocol        = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description     = "For SSH in ec2"
+    from_port       = 22
+    to_port         = 22
     protocol        = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
